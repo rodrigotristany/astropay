@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/nav_main"
+    android:id="@+id/navigation">
+
+    <fragment
+        android:id="@+id/nav_main"
+        android:name="com.rodrigotristany.astropay.presentation.mainview.MainFragment"
+        android:label="Ciudades"
+        tools:layout="@layout/fragment_main">
+
+        <action
+            android:id="@+id/next_action"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:destination="@id/nav_detail">
+        </action>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_detail"
+        android:name="com.rodrigotristany.astropay.presentation.detailview.DetailFragment"
+        android:label="Detalle"
+        tools:layout="@layout/fragment_detail">
+
+        <argument
+            android:name="city_name"
+            app:argType="string"/>
+
+        <argument
+            android:name="should_request_location"
+            app:argType="boolean"/>
+
+        <action
+            android:id="@+id/next_action"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:destination="@id/nav_main">
+        </action>
+
+    </fragment>
+
+</navigation>
