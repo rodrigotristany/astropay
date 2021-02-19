@@ -74,7 +74,7 @@ class ApiErrorMapper : ErrorHandler {
             Log.d("getHttpError", "getErrorMessage() called with: errorBody = [$result]")
             val json = Gson().fromJson(result, JsonObject::class.java)
             ErrorModel(
-                json.toString(),
+                json.get("message").asString,
                 400,
                 ErrorStatus.BAD_RESPONSE
             )

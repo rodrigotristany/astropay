@@ -11,5 +11,5 @@ interface WeatherApi {
     @GET("data/2.5/weather?appid=b497612441effeb3cce53157c6f4fc0c")
     suspend fun getWeatherByPositionAsync(
         @Query("lat") lat: Double,
-        @Query("long") long: Double): WeatherInfo
+        @Query("lon") long: Double): WeatherInfo
 }

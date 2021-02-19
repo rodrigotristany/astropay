@@ -2,6 +2,10 @@ package com.rodrigotristany.astropay.presentation.detailview
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.rodrigotristany.astropay.domain.entities.Location
+import com.rodrigotristany.astropay.domain.entities.WeatherModel
 import com.rodrigotristany.astropay.domain.models.ErrorModel
 import com.rodrigotristany.astropay.domain.usecases.GetWeatherByCityUseCase
 import com.rodrigotristany.astropay.domain.usecases.GetWeatherByPositionUseCase
@@ -18,13 +22,7 @@ class DetailViewModel
     fun weatherInfoByCity(city: String) {
         getWeatherByCityUseCase.execute(city) {
             onComplete {
-                var tempList = mutableListOf<DetailModel>()
-                tempList.add(DetailModel("Temperatura actual", "${it.temp} Cº"))
-                tempList.add(DetailModel("Temperatura mínima", "${it.minTemp} Cº"))
-                tempList.add(DetailModel("Temperatura máxima", "${it.maxTemp} Cº"))
-                tempList.add(DetailModel("Viento", "${it.wind} k/h"))
-                tempList.add(DetailModel("Humedad", "${it.humidity}%"))
-                weatherModelList.value = tempList
+                updarteWeatherInfo(it)
             }
 
             onError { throwable ->
@@ -35,8 +33,28 @@ class DetailViewModel
         }
     }
 
-    fun weatherInfoByPosition() {
+    fun weatherInfoByPosition(location: Location) {
+        getWeatherByPositionUseCase.execute(location) {
+            onComplete {
+                updarteWeatherInfo(it)
+            }
 
+            onError { throwable ->
+                error.value = throwable
+            }
+
+            onCancel {}
+        }
+    }
+
+    private fun updarteWeatherInfo(weatherModel: WeatherModel) {
+        var tempList = mutableListOf<DetailModel>()
+        tempList.add(DetailModel("Temperatura actual", "${weatherModel.temp} Cº"))
+        tempList.add(DetailModel("Temperatura mínima", "${weatherModel.minTemp} Cº"))
+        tempList.add(DetailModel("Temperatura máxima", "${weatherModel.maxTemp} Cº"))
+        tempList.add(DetailModel("Viento", "${weatherModel.wind} k/h"))
+        tempList.add(DetailModel("Humedad", "${weatherModel.humidity}%"))
+        weatherModelList.value = tempList
     }
 
     override fun onCleared() {
